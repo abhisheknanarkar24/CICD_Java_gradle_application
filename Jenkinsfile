@@ -15,8 +15,7 @@ pipeline{
                     withSonarQubeEnv(credentialsId: 'sonarqube') {
                             sh 'cd /opt/gradle/gradle-7.5-rc-1/'
                             sh 'chmod +x gradlew'
-                            sh './gradlew -version'
-                            sh './gradlew -Dsonar.host.url=http://54.91.142.27:9000 sonarqube --warning-mode all'
+                            sh './gradlew sonarqube --warning-mode all'
                     }
                    timeout(time: 1, unit: 'HOURS') {
                       def qg = waitForQualityGate()
