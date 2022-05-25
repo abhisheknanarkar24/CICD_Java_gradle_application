@@ -29,12 +29,12 @@ pipeline{
         stage("docker build & docker push"){
             steps{
                 script{
-                    withCredentials([string(credentialsId: 'docker-pass', variable: 'docker_password')]) {
+                    withCredentials([<object of type com.cloudbees.jenkins.plugins.awscredentials.AmazonWebServicesCredentialsBinding>]) {
+
                              sh '''
-                                docker build -t 54.162.196.37:8083/test-app:${VERSION} .
-                                docker login -u admin -p $docker_password 54.162.196.37:8083 
-                                docker push  54.162.196.37:8083/test-app:${VERSION}
-                                docker rmi 54.162.196.37:8083/test-app:${VERSION}
+                                docker build -t docker build -t 230221674655.dkr.ecr.us-east-1.amazonaws.com/java-app:${VERSION} .
+                                docker push  230221674655.dkr.ecr.us-east-1.amazonaws.com/java-app:${VERSION}
+                                docker rmi 230221674655.dkr.ecr.us-east-1.amazonaws.com/java-app:${VERSION}
                             '''
                     }
                 }
