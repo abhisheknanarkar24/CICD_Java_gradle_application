@@ -2,6 +2,11 @@ pipeline{
     agent any 
     environment{
         VERSION = "${env.BUILD_ID}"
+        AWS_ACCOUNT_ID="230221674655"
+        AWS_DEFAULT_REGION="us-east-1" 
+        IMAGE_REPO_NAME="java-app"
+        IMAGE_TAG="${VERSION}"
+        REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}"
     }
     stages{
         //stage("sonar quality check"){
@@ -29,14 +34,15 @@ pipeline{
         stage("docker build & docker push"){
             steps{
                 script{
-                    withCredentials([<object of type com.cloudbees.jenkins.plugins.awscredentials.AmazonWebServicesCredentialsBinding>]) {
+                
 
                              sh '''
+                                aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
                                 docker build -t docker build -t 230221674655.dkr.ecr.us-east-1.amazonaws.com/java-app:${VERSION} .
                                 docker push  230221674655.dkr.ecr.us-east-1.amazonaws.com/java-app:${VERSION}
                                 docker rmi 230221674655.dkr.ecr.us-east-1.amazonaws.com/java-app:${VERSION}
                             '''
-                    }
+                    
                 }
             }
         }
