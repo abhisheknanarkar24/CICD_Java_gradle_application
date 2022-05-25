@@ -31,10 +31,10 @@ pipeline{
                 script{
                     withCredentials([string(credentialsId: 'docker-pass', variable: 'docker_password')]) {
                              sh '''
-                                docker build -t 54.91.142.27:8083/test-app:${VERSION} .
-                                docker login -u admin -p $docker_password 54.91.142.27:8083 
-                                docker push  54.91.142.27:8083/test-app:${VERSION}
-                                docker rmi 54.91.142.27:8083/test-app:${VERSION}
+                                docker build -t 54.162.196.37:8083/test-app:${VERSION} .
+                                docker login -u admin -p $docker_password 54.162.196.37:8083 
+                                docker push  54.162.196.37:8083/test-app:${VERSION}
+                                docker rmi 54.162.196.37:8083/test-app:${VERSION}
                             '''
                     }
                 }
@@ -61,7 +61,7 @@ pipeline{
                              sh '''
                                  helmversion=$( helm show chart myapp | grep version | cut -d: -f 2 | tr -d ' ')
                                  tar -czvf  myapp-${helmversion}.tgz myapp/
-                                 curl -u $nexus_username:$nexus_password http://54.91.142.27:8081/repository/helm-hosted/ --upload-file myapp-${helmversion}.tgz -v
+                                 curl -u $nexus_username:$nexus_password http://54.162.196.37:8081/repository/helm-hosted/ --upload-file myapp-${helmversion}.tgz -v
                             '''
                           }
                     }
@@ -75,7 +75,7 @@ pipeline{
             steps {
                script{
                         dir('kubernetes/') {
-                          sh 'helm upgrade --install --set image.repository="54.91.142.27:8083/test-app" --set image.tag="${VERSION}" myjavaapp myapp/ ' 
+                          sh 'helm upgrade --install --set image.repository="54.162.196.37:8083/test-app" --set image.tag="${VERSION}" myjavaapp myapp/ ' 
                         }
                     
                }
