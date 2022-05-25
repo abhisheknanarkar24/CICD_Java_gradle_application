@@ -74,9 +74,12 @@ pipeline{
         stage('Deploying application on k8s cluster') {
             steps {
                script{
+                   withCredentials([usernamePassword(credentialsId: 'nexus', passwordVariable: 'nexus_password', usernameVariable: 'nexus_username')]) {
                         dir('kubernetes/') {
+                          sh 'docker login -u $nexus_username -p $nexus_password 54.162.196.37:8083'
                           sh 'helm upgrade --install --set image.repository="54.162.196.37:8083/test-app" --set image.tag="${VERSION}" myjavaapp myapp/ ' 
                         }
+               }
                     
                }
             }
