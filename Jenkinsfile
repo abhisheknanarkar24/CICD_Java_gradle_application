@@ -82,8 +82,7 @@ pipeline{
                script{
                    withCredentials([usernamePassword(credentialsId: 'nexus', passwordVariable: 'nexus_password', usernameVariable: 'nexus_username')]) {
                         dir('kubernetes/') {
-                          sh 'docker login -u $nexus_username -p $nexus_password 54.162.196.37:8083'
-                          sh 'helm upgrade --install --set image.repository="54.162.196.37:8083/test-app" --set image.tag="${VERSION}" myjavaapp myapp/ ' 
+                          sh 'helm upgrade --install --set image.repository="230221674655.dkr.ecr.us-east-1.amazonaws.com/java-app" --set image.tag="${VERSION}" myjavaapp myapp/ ' 
                         }
                }
                     
